@@ -4,7 +4,7 @@
 import numpy as np
 
 class couzinsModel:
-    def __init__(self,number_of_drones,velocity,swarm_initial,Rr,Ro,Ra,w,vision):
+    def __init__(self,number_of_drones,velocity,swarm_initial,Rr,Ro,Ra,vision):
         self.zor = []
         self.zoo = []
         self.zoa = []
@@ -14,15 +14,12 @@ class couzinsModel:
         self.Rr = Rr
         self.Ro = Ro
         self.Ra = Ra
-        self.w = w
-        self.swarm_velocities = np.array([[self.velocity,0.0] for i in range(self.number_of_drones)])
         self.vision_limit = vision
 
     def blind_spot_check(self,drone1,drone2):
-        pointing_vec = np.subtract(drone2[:2],drone1[:2])
-        vision_line = self.angle_wrap(np.arctan2(pointing_vec[1],pointing_vec[0]))
-        neighbour_region =  self.angle_wrap_0_2pi(drone1[2] - vision_line)
-        return abs(neighbour_region)
+        pointing_vec = np.subtract(drone1[:2],drone2[:2])
+        ang = np.arccos(np.dot(pointing_vec,drone2[:2])/(np.linalg.norm(pointing_vec)*np.linalg.norm(drone2[:2])))
+        return ang
 
     def neighbours_in_zones(self,current_drone):
         for i in range(self.number_of_drones):
@@ -45,8 +42,7 @@ class couzinsModel:
     def do_orientation(self):  #   2nd Priority
         orient = np.array([0.0,0.0])
         for i in self.zoo:
-            dronej = np.array([np.cos(self.swarm[i[0],2]),np.sin(self.swarm[i[0],2])])
-            orient += dronej/np.linalg.norm(dronej)
+            orient += np.array([np.cos(self.swarm[i[0],2]),np.sin(self.swarm[i[0],2])])
         return orient
 
     def da_attract(self,current_drone):      #   3rd Priority
@@ -82,6 +78,11 @@ class couzinsModel:
     def angle_wrap_0_2pi(self,angle):
         while angle<0:
             angle += 2*np.pi
-        while angle>2*np.pi:
+        while angle>=2*np.pi:
+            angle -= 2*np.pi
+        return angle
+    
+    def angle_w_n_pi_p_pi(self,angle):
+        if angle>np.pi:    
             angle -= 2*np.pi
         return angle
