@@ -49,7 +49,7 @@ while count<=1000:
 
         couzin_model.swarm[i,2] += couzin_model.saturate(desired_angle,theta * dt)
 
-        couzin_model.swarm[i,2] = couzin_model.angle_wrap_0_2pi(couzin_model.swarm[i,2])
+        # couzin_model.swarm[i,2] = couzin_model.angle_wrap_0_2pi(couzin_model.swarm[i,2])
 
         couzin_model.swarm[i,:2] += dt* np.array([s*np.cos(couzin_model.swarm[i,2]),s*np.sin(couzin_model.swarm[i,2])])
 
@@ -60,7 +60,7 @@ while count<=1000:
         plt.xlim(-100,100)
         plt.ylim(-100,100)
     count += 1
-    plt.pause(0.0001)
+    plt.pause(0.00001)
     fig.clear()
 plt.waitforbuttonpress()
 plt.close()
