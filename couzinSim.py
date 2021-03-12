@@ -11,7 +11,7 @@ plt.ion()
 number_of_drones = 50
 dt = 0.1
 Rr = 1
-Ro = 23
+Ro = 5
 Ra = 150
 s = 30
 theta = 70*np.pi/(180) # turning rate in degrees per second
